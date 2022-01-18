@@ -100,7 +100,7 @@ describe('REST Authorized Collections endpoints', () => {
                             .set('Authorization', `Bearer ${userToken}`)
                             .send({
                                 collectionId: 9999, // Non existing ID
-                                storyId: 29978723 // Microsoft to Acquire Activision Blizzard (..sigh)
+                                itemId: 29978723 // Microsoft to Acquire Activision Blizzard (..sigh)
                             })
                             .set('Accept', 'application/json')
                             .expect('Content-Type', /json/)
@@ -116,7 +116,7 @@ describe('REST Authorized Collections endpoints', () => {
                             .set('Authorization', `Bearer ${userToken}`)
                             .send({
                                 collectionId: collectionId,
-                                storyId: 299787234 // Non existing HN item ID
+                                itemId: 299787234 // Non existing HN item ID
                             })
                             .set('Accept', 'application/json')
                             .expect('Content-Type', /json/)
@@ -132,7 +132,7 @@ describe('REST Authorized Collections endpoints', () => {
                             .set('Authorization', `Bearer ${userToken}`)
                             .send({
                                 collectionId: collectionId,
-                                storyId: 29978723
+                                itemId: 29978723
                             })
                             .set('Accept', 'application/json')
                             .expect('Content-Type', /json/)
