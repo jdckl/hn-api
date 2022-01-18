@@ -4,6 +4,9 @@ import { validationResult, body } from 'express-validator';
 import { getItemById } from './hn-api/hackerNewsApi';
 import Collection from '../models/Collections';
 import Story from '../models/Stories';
+import Comment from '../models/Comments';
+
+import {CommentQue} from './hn-api/hackerNewsQue';
 
 const storiesController = {
     /**
@@ -63,8 +66,25 @@ const storiesController = {
             url: itemDoc.url ? itemDoc.url : ''
         });
 
+        // Comments
+        let commentIds:number[] = [];
+        if (itemDoc.childrenIds.length > 0) {
+            // Has children (story => comments)
+            commentIds = itemDoc.childrenIds;
+        }
+
         try {
             const insert = await storyDoc.save();
+
+            // Add comments to que
+            if (commentIds && commentIds.length > 0) {
+                console.log(commentIds)
+                commentIds.forEach((commentId) => CommentQue.push({
+                    commentId: commentId,
+                    storyId: insert.id
+                }))
+            }
+
             return res.status(200).json({ success: true, message: 'Story added to collection successfuly.', storyId: insert.id });
         } catch (error: unknown) {
             return res.status(500).json({ error: true, message: (error instanceof Error && process.env.NODE_ENV!=='production') ? error.message : `Couldn't add story!` });
@@ -91,7 +111,7 @@ const storiesController = {
     },
 
     /**
-     * Get singular story
+     * Get singular story /w comments
      * @param {Request} req 
      * @param {Response} res 
      */
@@ -107,8 +127,15 @@ const storiesController = {
         });
         if (!storyDoc) return res.status(404).json({ error: true, message: 'No story found under given ID.' });
 
+        // Comments
+        const commentsDocs = await Comment.findAll({
+            where: {
+                storyId: storyId
+            }
+        });
+
         // Response
-        return res.status(200).json({ success: true, story: storyDoc, comments: [] }); // @todo comments
+        return res.status(200).json({ success: true, story: storyDoc, comments: commentsDocs ?? [] }); // @todo comments
     },
 
     /**

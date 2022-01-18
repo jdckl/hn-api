@@ -9,7 +9,7 @@ import Comment from './Comments';
 
 // Attributes
 interface StoriesAttributes {
-    id: string;
+    id: number;
     itemId: number;
     collectionId: string;
     title: string;

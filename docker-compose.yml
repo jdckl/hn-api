@@ -14,19 +14,18 @@ services:
       - sl-postgres:/var/lib/postgresql/data
     ports:
       - 5432:5432
-  elastic:
-    image: docker.elastic.co/elasticsearch/elasticsearch-oss:7.10.2
-    container_name: sl-elastic
-    volumes:
-      - sl-elastic:/usr/share/elasticsearch/data
+  app:
+    depends_on:
+      - postgres
+    build:
+      context: .
+      dockerfile: Dockerfile
+    env_file: .env
     environment:
-      - ES_JAVA_OPTS=-Xms256m -Xmx256m
-      - discovery.type=single-node
+      NODE_ENV: development
+    restart: always
     ports:
-      - 9200:9200
-
+      - "3000:3000"
 volumes:
-  sl-elastic:
-    driver: local
   sl-postgres:
     driver: local

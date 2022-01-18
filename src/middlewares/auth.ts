@@ -4,7 +4,7 @@ import defaultConfig from '../config/default.config';
 
 // Base jwt interface
 interface AuthToken {
-    userId: string;
+    userId: number;
     email: string;
 }
 
@@ -13,7 +13,7 @@ interface AuthToken {
  * @param {object} user 
  * @returns {string} 
  */
-export const signToken = (user:{id:string, email:string, password?:string}) : object => {
+export const signToken = (user:{id:number, email:string, password?:string}) : object => {
     // Expire in 1 hour
     const expiration = Math.floor(Date.now() / 1000) + (60 * 60);
 

@@ -1,6 +1,5 @@
 import axios from 'axios';
-import { Item } from './hackerNewsItem';
-import { RawItem } from './hackerNewsItemRaw';
+import { Item, RawItem } from './hackerNewsItem';
 
 // List of API URLs
 const URL = {
@@ -9,21 +8,12 @@ const URL = {
 }
 
 /**
- * Convert unix timestamp to ISO String time
- * @param {number} time Unix timestamp
- * @returns {string} ISO String
- */
-function unixTimeToISO (time: number) : string {
-    return new Date(time * 1000).toISOString();
-}
-
-/**
  * Get single item (story) API URL
  * @param {string} itemId ID of the item (story/comment)
  * @returns {string} URL
  */
-function getItemURL (itemId: string) : string {
-    return URL.item.replace('ITEM_ID', itemId);
+function getItemURL (itemId: number) : string {
+    return URL.item.replace('ITEM_ID', String(itemId));
 }
 
 /**
@@ -47,7 +37,7 @@ async function getItemJSON (url: string) : Promise<RawItem|undefined> {
  * @returns {object} Item
  */
 function populateItem({itemData}: {itemData: RawItem}) : Item {
-    const timestamp = itemData.time ? unixTimeToISO(itemData.time) : undefined;
+    const timestamp = itemData.time ? itemData.time : Math.floor(Date.now() / 1000);
 
     return {
         id: itemData.id,
@@ -67,7 +57,7 @@ function populateItem({itemData}: {itemData: RawItem}) : Item {
  * @param {string} id ID of the item (story/comment)
  * @returns {object|boolean} Item
  */
-export async function getItemById (id: string) : Promise<Item|undefined> {
+export async function getItemById (id: number) : Promise<Item|undefined> {
     try {
         const itemData = await getItemJSON(getItemURL(id));
         if (!itemData) {

@@ -27,7 +27,8 @@
       "@types/jest",
       "morgan",
       "express",
-      "bcryptjs"
+      "bcryptjs",
+      "@types/supertest"
     ],
     "lib": [
       "ES6",

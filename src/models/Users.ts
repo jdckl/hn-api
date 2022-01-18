@@ -8,7 +8,7 @@ import Collection from './Collections';
 
 // Attributes
 interface UsersAttributes {
-    id: string;
+    id: number;
     email: string;
     password: string;
 }

@@ -7,8 +7,9 @@ import connection from '../middlewares/database';
 
 // Attributes
 interface CommentsAttributes {
-    id: string;
+    id: number;
     itemId: number;
+    storyId: number;
     author: string;
     text: string;
     commentedOn: number;
@@ -40,6 +41,11 @@ const Comment = connection.define<CommentInstance>(
         itemId: {
             allowNull: false,
             type: DataTypes.MEDIUMINT
+        },
+        storyId: {
+            allowNull: false,
+            autoIncrement: false,
+            type: DataTypes.UUID
         },
         author: {
             allowNull: false,

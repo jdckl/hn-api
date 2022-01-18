@@ -9,9 +9,9 @@ import Story from './Stories';
 
 // Attributes
 interface CollectionAttributes {
-    id: string;
+    id: number;
     name: string;
-    ownerId: string;
+    ownerId: number;
 }
 
 // ID is optional for insert
