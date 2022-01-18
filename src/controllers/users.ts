@@ -7,6 +7,7 @@ import baseController from './base';
 
 const userController = {
     /**
+     * @ignore
      * Validate incoming input
      * @param {string} method method name
      * @returns {NextFunction|Response}
@@ -35,10 +36,10 @@ const userController = {
     },
 
     /**
-     * Login with a email/password combination
-     * @param {Request} req 
-     * @param {Response} res 
-     * @returns 
+     * POST /users/register
+     * __Login with a email/password combination__
+     * @param {string} email
+     * @param {string} password
      */
     login: async (req:Request, res:Response) => {
         // Req data
@@ -51,7 +52,7 @@ const userController = {
     
             // Password match
             const passwordMatches = await baseController.comparePassword(password, userDoc.password);
-            if (!passwordMatches) return res.status(404).json({ error: true, message: 'User account was not found!' }); // 404 to not announce a 403 wrong creds?
+            if (!passwordMatches) return res.status(404).json({ error: true, message: 'User account was not found!' });
 
             // Token handover
             const tokenData = signToken(userDoc);
@@ -62,10 +63,10 @@ const userController = {
     },
 
     /**
-     * Register a new user
-     * @param {Request} req 
-     * @param {Response} res 
-     * @returns 
+     * POST /users/register
+     * __Register a new user account__
+     * @param {string} email
+     * @param {string} password
      */
     createUser: async (req:Request, res:Response) => {
         // Req data
@@ -74,6 +75,14 @@ const userController = {
         // Hash password
         const bcryptSalt = await baseController.generateSalt();
         const hashedPassword = await baseController.hashPassword(password, bcryptSalt);
+
+        // Existing user
+        const emailRegistered = await User.findOne({
+            where: {
+                email: email
+            }
+        })
+        if (emailRegistered) return res.status(400).json({ error: true, message: 'This user account already exists!' });
 
         // User document
         const userDoc = User.build({

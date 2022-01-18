@@ -10,6 +10,7 @@
     "clean": "rm -rf dist build",
     "ts-node": "ts-node",
     "migrate": "node-pg-migrate",
+    "docs": "typedoc",
     "test": "jest"
   },
   "repository": {
@@ -39,6 +40,7 @@
     "sequelize": "^6.13.0",
     "ts-jest": "^27.1.3",
     "ts-node": "^10.4.0",
+    "typedoc": "^0.22.11",
     "winston": "^3.4.0"
   },
   "devDependencies": {

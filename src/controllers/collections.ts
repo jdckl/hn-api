@@ -6,6 +6,7 @@ import Story from '../models/Stories';
 
 const collectionsController = {
     /**
+     * @ignore
      * Validate incoming input
      * @param {string} method method name
      * @returns {NextFunction|Response}
@@ -31,9 +32,9 @@ const collectionsController = {
     },
 
     /**
-     * Create a new story collection
-     * @param {Request} req 
-     * @param {Response} res 
+     * POST /collections/add
+     * __Create a new story collection__
+     * @param {string} name
      */
     createCollection: async (req:Request, res:Response) => {
         // Req data
@@ -54,12 +55,10 @@ const collectionsController = {
     },
 
     /**
-     * Get all owned collections
-     * @param {Request} req 
-     * @param {Response} res 
+     * GET /collections/get-all
+     * __Get all owned collections__
      */
     getAllCollections: async (req:Request, res:Response) => {
-        console.log(req.currentUser)
         // Collection documents
         const collectionDocs = await Collection.findAll({ 
             where: { 
@@ -71,9 +70,9 @@ const collectionsController = {
     },
 
     /**
-     * Get singular collection with its stories
-     * @param {Request} req 
-     * @param {Response} res 
+     * GET /collections/get/:collectionId
+     * __Get singular collection with its stories__
+     * @param {number} collectionId
      */
     getCollection: async (req:Request, res:Response) => {
         // Req data
@@ -100,9 +99,9 @@ const collectionsController = {
     },
 
     /**
-     * Remove an existing collection
-     * @param {Request} req 
-     * @param {Response} res 
+     * DELETE /collections/remove/:collectionId
+     * __Remove an existing collection__
+     * @param {number} collectionId
      */
     removeCollection: async (req:Request, res:Response) => {
         // Req data
@@ -114,13 +113,6 @@ const collectionsController = {
                 where: {
                     id: collectionId,
                     ownerId: req.currentUser.userId
-                }
-            });
-
-            // Remove stories
-            await Story.destroy({
-                where: {
-                    collectionId: collectionId
                 }
             });
 

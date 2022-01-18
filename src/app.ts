@@ -26,6 +26,6 @@ const APP = express();
       APP.use('/users', userRouter);
       APP.use('/collections', collectionsRouter);
       APP.use('/stories', storiesRouter);
-      APP.get('/', baseController.renderSplash);
+      APP.get('/', baseController.renderSplash); // Static splash screen just to serve something at base level
 
 export default APP;

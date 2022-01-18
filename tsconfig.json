@@ -17,6 +17,7 @@
     "esModuleInterop": true,
     "allowSyntheticDefaultImports": true,
     "experimentalDecorators": true,
+    "emitDecoratorMetadata": true,
     "sourceMap": true,
     "outDir": "./dist/tsc/",
     "typeRoots": [
@@ -34,6 +35,14 @@
       "ES6",
       "DOM"
     ]
+  },
+  "typedocOptions": {
+    "entryPoints": [
+      "src/controllers/collections.ts",
+      "src/controllers/stories.ts",
+      "src/controllers/users.ts"
+    ],
+    "out": "docs"
   },
   "include": [
     "src/**/*.ts"

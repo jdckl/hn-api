@@ -10,6 +10,7 @@ import {CommentQue} from './hn-api/hackerNewsQue';
 
 const storiesController = {
     /**
+     * @ignore
      * Validate incoming input
      * @param {string} method method name
      * @returns {NextFunction|Response}
@@ -36,9 +37,10 @@ const storiesController = {
     },
 
     /**
-     * Add a story to a collection
-     * @param {Request} req 
-     * @param {Response} res 
+     * POST /stories/add
+     * __Add a story to a collection__
+     * @param {string} email
+     * @param {string} password
      */
     addStoryToCollection: async (req:Request, res:Response) => {
         // Req data
@@ -92,13 +94,22 @@ const storiesController = {
     },
 
     /**
-     * Get all stories inside a collection
-     * @param {Request} req 
-     * @param {Response} res 
+     * GET /stories/get-all/:collectionId
+     * __Get all stories inside a collection__
+     * @param {number} collectionId
      */
     getAllStoriesInCollection: async (req:Request, res:Response) => {
         // Params
         const {collectionId} = req.params;
+
+        // Collection document
+        const collectionDoc = await Collection.findOne({
+            where: {
+                id: collectionId,
+                ownerId: req.currentUser.userId
+            }
+        });
+        if (!collectionDoc) return res.status(404).json({ error: true, message: 'No collection found under given ID.' });
         
         // Collection documents
         const storyDocs = await Story.findAll({ 
@@ -111,9 +122,9 @@ const storiesController = {
     },
 
     /**
-     * Get singular story /w comments
-     * @param {Request} req 
-     * @param {Response} res 
+     * GET /stories/get/:storyId
+     * __Get singular story /w comments__
+     * @param {number} storyId
      */
     getStory: async (req:Request, res:Response) => {
         // Req data
@@ -127,6 +138,15 @@ const storiesController = {
         });
         if (!storyDoc) return res.status(404).json({ error: true, message: 'No story found under given ID.' });
 
+        // Collection document
+        const collectionDoc = await Collection.findOne({
+            where: {
+                id: storyDoc.collectionId,
+                ownerId: req.currentUser.userId
+            }
+        });
+        if (!collectionDoc) return res.status(404).json({ error: true, message: 'No collection found under given story ID.' });
+
         // Comments
         const commentsDocs = await Comment.findAll({
             where: {
@@ -139,13 +159,23 @@ const storiesController = {
     },
 
     /**
-     * Remove an existing collection
-     * @param {Request} req 
-     * @param {Response} res 
+     * DELETE /stories/remove/:collectionId/:storyId
+     * __Remove a story from a collection__
+     * @param {number} collectionId
+     * @param {number} storyId
      */
     removeStoryFromCollection: async (req:Request, res:Response) => {
         // Req data
         const {collectionId, storyId} = req.params;
+
+        // Collection document
+        const collectionDoc = await Collection.findOne({
+            where: {
+                id: collectionId,
+                ownerId: req.currentUser.userId
+            }
+        });
+        if (!collectionDoc) return res.status(404).json({ error: true, message: 'No collection found under given ID.' });
 
         try {
             // Remove Story

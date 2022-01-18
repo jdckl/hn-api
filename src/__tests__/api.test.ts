@@ -58,6 +58,21 @@ describe('REST Un-authorized endpoints', () => {
         userId = response.body.userId;
         userToken = response.body.token;
     })
+
+    it('should return "This user account already exists!" and 400', async () => {
+        const response = await request(APP)
+                            .post('/users/register')
+                            .send({
+                                email: 'test@test.com',
+                                password: 'password'
+                            })
+                            .set('Accept', 'application/json')
+                            .expect('Content-Type', /json/)
+                            .expect(400);
+
+        expect(response.body.error).toBeTruthy();
+        expect(response.body.message).toBe('This user account already exists!');
+    })
 })
 
 // Collections test

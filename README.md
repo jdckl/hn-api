@@ -10,13 +10,40 @@ To initialize the project for development, perform the following:
 git clone http://git.gut/hn-api
 cd hn-api
 docker-compose up
-npm install
 npm run migrate up
-npm run start:dev
 ```
 
-__Make sure you have an .env file in the root of your project with at least the DB_URL env variable defined, containing the entire Postgres URL with authentication string.__
+Results in 2 docker containers running for PostgreSQL and the API, and migrates your PGDB with the base structure migration.  
 
+__Make sure you have an .env file in the root of your project with at least the DB_URL env variable defined, containing the entire Postgres URL with authentication string, if you want to run migrations!__
+
+## Config
+
+Project is using [dotenv](https://www.npmjs.com/package/dotenv), you can overwrite any environment variables with your own, there is a base set of development variables included in the **config/default.config.ts**.
+
+## API Definitions
+
+You can generate simple definitions by running:
+```sh
+npm run docs
+```
+and then visiting the ./docs/index.html
+
+The API is following a nested structure with three base paths:
+- /users
+- /collections
+- /stories
+
+The usual responses include 200, 400, 401, 404 and 500.
+Succesful syntax follow a JSON pattern of
+```json
+{ success: true, ...args }
+```
+Failure syntax follow a JSON pattern of
+```json
+{ error: true, message: 'Something went terribly wrong'}
+```
+ 
 ## Tests
 
 Testing is setup with [Jest](https://jestjs.io/) and [Supertest](https://www.npmjs.com/package/supertest), and are located in **src/__tests__**, you can run them with:
@@ -30,8 +57,7 @@ npm test
 ```
 - __tests__
 - config / simple declared global config directory
-- controllers / business logic and database operations
-- hn-api / HackerNews API connector
+- controllers / business logic and database operations, hn-api connector
 - logs / generated and populated with logger
 - middlewares / middleware or general server functions
 - models / database logic and modeling
