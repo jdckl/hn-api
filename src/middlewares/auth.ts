@@ -41,7 +41,7 @@ export const verifyToken = (req: Request, res: Response, next: NextFunction) => 
     let jwtPayload;
 
     try {
-        jwtPayload = <any>verify(token, defaultConfig.appSecret);
+        jwtPayload = verify(token, defaultConfig.appSecret);
     } catch (error: unknown) {
         return res.status(401).json({ error: true, message: (error instanceof Error && process.env.NODE_ENV!=='production') ? error.message : 'Unathorized access!' });
     }

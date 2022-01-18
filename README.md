@@ -19,7 +19,7 @@ __Make sure you have an .env file in the root of your project with at least the 
 
 ## Config
 
-Project is using [dotenv](https://www.npmjs.com/package/dotenv), you can overwrite any environment variables with your own, there is a base set of development variables included in the **config/default.config.ts**.
+Project is using [dotenv](https://www.npmjs.com/package/dotenv), you can overwrite any environment variables with your own, there is a base set of development variables included in the **config/default.config.ts**. Sample **.env.temp** is included.
 
 ## API Definitions
 
@@ -51,8 +51,16 @@ Testing is setup with [Jest](https://jestjs.io/) and [Supertest](https://www.npm
 ```sh
 npm test
 ```
+Make sure your Postgres docker is running, or any other PG instance you are going to connnect to.
 
-## App structure
+## Linter
+
+ESlint configuration (.eslintrc.js) and the module are included. You can run the linter by running:
+```sh
+npm run lint
+```
+
+## App structure (src)
 
 ```
 - __tests__
@@ -65,3 +73,5 @@ npm test
 - app.ts / app definition and init
 - index.ts / server definition and init
 ```
+
+_Custom type declarations are included in ./types_

@@ -19,7 +19,7 @@ export const CommentQue:queueAsPromised<DownloadCommentTask> = fastq.promise(dow
  * @param {DownloadCommentTask} arg 
  */
 async function downloadWorker (arg: DownloadCommentTask) : Promise<void> {
-    let {storyId, commentId} = arg;
+    const {storyId, commentId} = arg;
     const itemDoc = await getItemById(commentId);
 
     if (itemDoc) {
