@@ -1,4 +1,4 @@
-import { getItemById } from '../hacker-news/hackerNewsApi';
+import { getItemById } from '../controllers/hn-api/hackerNewsApi';
 
 // Single item
 it('should get a single HN item from the API', async () => {
