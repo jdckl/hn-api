@@ -1,7 +1,7 @@
 import { NextFunction, Request, Response } from 'express';
 import { validationResult, body } from 'express-validator';
 
-import { getItemById } from '../hacker-news/hackerNewsApi';
+import { getItemById } from '../hn-api/hackerNewsApi';
 import Collection from '../models/Collections';
 import Story from '../models/Stories';
 
