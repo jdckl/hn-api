@@ -10,7 +10,8 @@ const dbPassword = defaultConfig.dbPassword;
 const connection = new Sequelize(dbName, dbUser, dbPassword, 
     {
         host: dbHost,
-        dialect: dbDriver
+        dialect: dbDriver,
+        logging: false
     })
 
 export default connection;
