@@ -10,7 +10,7 @@
     "strictFunctionTypes": true /* Enable strict checking of function types. */,
     "noUnusedLocals": true /* Report errors on unused locals. */,
     "noUnusedParameters": true /* Report errors on unused parameters. */,
-    "noImplicitReturns": true /* Report error when not all code paths in function return a value. */,
+    "noImplicitReturns": false /* Report error when not all code paths in function return a value. */,
     "noFallthroughCasesInSwitch": true /* Report errors for fallthrough cases in switch statement. */,
     "importHelpers": true,
     "skipLibCheck": true,
@@ -19,9 +19,15 @@
     "experimentalDecorators": true,
     "sourceMap": true,
     "outDir": "./dist/tsc/",
+    "typeRoots": [
+      "./types"
+    ],
     "types": [
       "node",
-      "jest"
+      "@types/jest",
+      "morgan",
+      "express",
+      "bcryptjs"
     ],
     "lib": [
       "ES6",

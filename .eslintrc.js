@@ -4,6 +4,9 @@ module.exports = {
   plugins: [
     '@typescript-eslint',
   ],
+  rules: {
+    '@typescript-eslint/no-empty-interface': 'off'
+  },
   extends: [
     'eslint:recommended',
     'plugin:@typescript-eslint/recommended',
