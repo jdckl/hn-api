@@ -28,9 +28,13 @@ async function downloadWorker (arg: DownloadCommentTask) : Promise<void> {
             storyId: storyId,
             text: itemDoc.text ? itemDoc.text : '',
             author: itemDoc.author ? itemDoc.author: '',
-            commentedOn: itemDoc.timestamp ? itemDoc.timestamp : new Date().getTime()
+            commentedOn: itemDoc.timestamp ? new Date(itemDoc.timestamp * 1000).toISOString() : new Date().toISOString()
         })
 
-        await commentDoc.save();
+        try {
+            await commentDoc.save();
+        } catch (err) {
+            console.log(err)
+        }
     }
 }

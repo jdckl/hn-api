@@ -12,7 +12,7 @@ interface CommentsAttributes {
     storyId: number;
     author: string;
     text: string;
-    commentedOn: number;
+    commentedOn: string;
 }
 
 // ID is optional for insert
@@ -57,7 +57,7 @@ const Comment = connection.define<CommentInstance>(
         },
         commentedOn: {
             allowNull: false,
-            type: DataTypes.TIME
+            type: DataTypes.DATE
         }
     }
 )

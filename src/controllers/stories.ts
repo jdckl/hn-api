@@ -19,7 +19,7 @@ const storiesController = {
         switch (method) {
             case 'addStoryToCollection':
                 return [
-                    body('storyId').exists().notEmpty(),
+                    body('itemId').exists().notEmpty(),
                     body('collectionId').exists().notEmpty(),
                     (req:Request, res:Response, next:NextFunction) => {
                         const validationErrors = validationResult(req);
@@ -39,12 +39,12 @@ const storiesController = {
     /**
      * POST /stories/add
      * __Add a story to a collection__
-     * @param {string} email
-     * @param {string} password
+     * @param {number} itemId HN item ID
+     * @param {number} collectionId Internal ID
      */
     addStoryToCollection: async (req:Request, res:Response) => {
         // Req data
-        const { storyId, collectionId } = req.body;
+        const { itemId, collectionId } = req.body;
 
         // Collection document
         const collectionDoc = await Collection.findOne({
@@ -56,12 +56,13 @@ const storiesController = {
         if (!collectionDoc) return res.status(404).json({ error: true, message: 'No collection found under given ID.' });
 
         // HN Item
-        const itemDoc = await getItemById(storyId);
+        const itemDoc = await getItemById(itemId);
         if (!itemDoc) return res.status(404).json({ error: true, message: 'No story found under given ID.' });
+        if (itemDoc.type==='comment') return res.status(400).json({ error: true, message: 'Item is a comment, not a story.' });
 
         // Collection document
         const storyDoc = Story.build({
-            itemId: storyId,
+            itemId: itemId,
             collectionId: collectionId,
             title: itemDoc.title ? itemDoc.title : '',
             text: itemDoc.text ? itemDoc.text : '',
@@ -80,7 +81,6 @@ const storiesController = {
 
             // Add comments to que
             if (commentIds && commentIds.length > 0) {
-                console.log(commentIds)
                 commentIds.forEach((commentId) => CommentQue.push({
                     commentId: commentId,
                     storyId: insert.id
@@ -96,7 +96,7 @@ const storiesController = {
     /**
      * GET /stories/get-all/:collectionId
      * __Get all stories inside a collection__
-     * @param {number} collectionId
+     * @param {number} collectionId Internal ID
      */
     getAllStoriesInCollection: async (req:Request, res:Response) => {
         // Params
@@ -124,7 +124,7 @@ const storiesController = {
     /**
      * GET /stories/get/:storyId
      * __Get singular story /w comments__
-     * @param {number} storyId
+     * @param {number} storyId Internal ID
      */
     getStory: async (req:Request, res:Response) => {
         // Req data
@@ -161,8 +161,8 @@ const storiesController = {
     /**
      * DELETE /stories/remove/:collectionId/:storyId
      * __Remove a story from a collection__
-     * @param {number} collectionId
-     * @param {number} storyId
+     * @param {number} collectionId Internal ID
+     * @param {number} storyId Internal ID
      */
     removeStoryFromCollection: async (req:Request, res:Response) => {
         // Req data

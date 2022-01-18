@@ -101,7 +101,7 @@ exports.up = pgm => {
         storyId: {
             type: 'integer',
             notNull: true,
-            references: '"collections"',
+            references: '"stories"',
             onDelete: 'cascade',
         },
         author: {
@@ -113,7 +113,7 @@ exports.up = pgm => {
             notNull: true
         },
         commentedOn: {
-            type: 'time',
+            type: 'timestamp',
             notNull: true
         },
         createdAt: {
@@ -132,8 +132,8 @@ exports.up = pgm => {
 };
 
 exports.down = pgm => {
-    pgm.dropTable('users')
-    pgm.dropTable('collections')
-    pgm.dropTable('stories')
-    pgm.dropTable('comments')
+    pgm.dropTable('users', {cascade: true})
+    pgm.dropTable('collections', {cascade: true})
+    pgm.dropTable('stories', {cascade: true})
+    pgm.dropTable('comments', {cascade: true})
 };

@@ -45,7 +45,7 @@ function populateItem({itemData}: {itemData: RawItem}) : Item {
         author: itemData.by,
         title: itemData.title,
         url: itemData.url,
-        text: itemData.text,
+        text: itemData.text ? itemData.text.replace(/<\/?[^>]+(>|$)/g, "") : '',
         timestamp: timestamp,
         parentId: itemData.parent,
         childrenIds: itemData.kids
@@ -60,7 +60,7 @@ function populateItem({itemData}: {itemData: RawItem}) : Item {
 export async function getItemById (id: number) : Promise<Item|undefined> {
     try {
         const itemData = await getItemJSON(getItemURL(id));
-        if (!itemData) {
+        if (!itemData || (itemData && !['story', 'comment'].includes(itemData.type))) {
             return;
         }
 

@@ -21,6 +21,10 @@ __Make sure you have an .env file in the root of your project with at least the 
 
 Project is using [dotenv](https://www.npmjs.com/package/dotenv), you can overwrite any environment variables with your own, there is a base set of development variables included in the **config/default.config.ts**. Sample **.env.temp** is included.
 
+## Authorization
+
+API is using stateless JWT authorization via bearer tokens. For any authorized request paths you need to include a authorization header with your current Bearer token.  
+
 ## API Definitions
 
 You can generate simple definitions by running:
@@ -43,6 +47,48 @@ Failure syntax follow a JSON pattern of
 ```json
 { error: true, message: 'Something went terribly wrong'}
 ```
+
+## Routes
+
+### Users
+
+- #### **POST /users/register**  
+    _Register a new user account_  
+    Expects a ```{email: string, password: string}``` body payload, on success returns ```{success: boolean, message: string, token: string, expires: timestamp, userId: number}```  
+
+- #### **POST /users/login**  
+    _Login with credentials_  
+    Expects a ```{email: string, password: string}``` body payload, on success returns ```{success: boolean, token: string, expires: timestamp, userId: number}```
+
+### Collections
+
+- #### **POST /collections/add**  
+    _Add a new collection_  
+    Expects a ```{name: string}``` body payload, on success returns ```{success: boolean, collectionId: number}```
+- #### **DELETE /collections/remove/:collectionId**  
+    _Remove an existing collection_  
+    Expects a ```collectionId``` url parameter, on success returns ```{success: boolean, message: string}```
+- #### **GET /collections/get-all**  
+    _Get all collections for the authorized user_  
+    On success returns ```{success: boolean, collections: array}```
+- #### **GET /collections/get/:collectionId**  
+    _Get a single collection based on its pg ID, verifies ownership_  
+    Expects a ```collectionId``` url parameter, on success returns ```{success: boolean, collection: object, stories: array}```
+
+### Stories
+
+- #### **POST /stories/add**  
+    _Add a new story to a collection, must be collection owner, supply the itemId from HN_  
+    Expects a ```{collectionId: number, itemId: number (HN ID)}``` body payload, on success returns ```{success: boolean, message: string, storyId: number}```
+- #### **POST /stories/remove/:collectionId/:storyId**  
+    _Remove a story from a collection and its related comments, both IDs are postgres record ids_  
+    Expects a ```collectionId, storyId``` url parameters, on success returns ```{success: boolean, message: string}```
+- #### **GET /stories/get-all/:collectionId**  
+    _Get all stories belonging to a owned collection_  
+    On success returns ```{success: boolean, stories: array}```
+- #### **GET /stories/get/:storyId**
+    _Get a singular story with its respective comments, must own the story in their collection_  
+    Expects a ```storyId``` url parameter, on success returns ```{success: boolean, story: object, comments: array}```
  
 ## Tests
 

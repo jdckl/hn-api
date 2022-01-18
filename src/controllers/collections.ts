@@ -34,7 +34,7 @@ const collectionsController = {
     /**
      * POST /collections/add
      * __Create a new story collection__
-     * @param {string} name
+     * @param {string} name Name of the new collection
      */
     createCollection: async (req:Request, res:Response) => {
         // Req data
@@ -72,7 +72,7 @@ const collectionsController = {
     /**
      * GET /collections/get/:collectionId
      * __Get singular collection with its stories__
-     * @param {number} collectionId
+     * @param {number} collectionId Internal ID
      */
     getCollection: async (req:Request, res:Response) => {
         // Req data
@@ -101,7 +101,7 @@ const collectionsController = {
     /**
      * DELETE /collections/remove/:collectionId
      * __Remove an existing collection__
-     * @param {number} collectionId
+     * @param {number} collectionId Internal ID
      */
     removeCollection: async (req:Request, res:Response) => {
         // Req data
