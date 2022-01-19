@@ -80,7 +80,7 @@ Failure syntax follow a JSON pattern of
 - #### **POST /stories/add**  
     _Add a new story to a collection, must be collection owner, supply the itemId from HN_  
     Expects a ```{collectionId: number, itemId: number (HN ID)}``` body payload, on success returns ```{success: boolean, message: string, storyId: number}```
-- #### **POST /stories/remove/:collectionId/:storyId**  
+- #### **DELETE /stories/remove/:collectionId/:storyId**  
     _Remove a story from a collection and its related comments, both IDs are postgres record ids_  
     Expects a ```collectionId, storyId``` url parameters, on success returns ```{success: boolean, message: string}```
 - #### **GET /stories/get-all/:collectionId**  
